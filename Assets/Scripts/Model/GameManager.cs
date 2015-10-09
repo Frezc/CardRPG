@@ -1,13 +1,34 @@
-﻿namespace Model {
+﻿
+using System;
+
+namespace Model {
     /// <summary>
     /// 游戏数据都会保存在这
     /// </summary>
     public class GameManager {
 
-        public GameManager Instance {
-            get { return instance; }
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        public static GameManager Instance {
+            get {
+                if (null == instance) {
+                    lock (SynObject) {
+                        if (null == instance) {
+                            instance = new GameManager();
+                        }
+                    }
+                }
+                return instance;
+            }
         }
 
-        private GameManager instance = new GameManager();
+        private static GameManager instance = null;
+        private static readonly object SynObject = new Object();
+
+        private GameManager() {}
+
+
+
     }
 }
