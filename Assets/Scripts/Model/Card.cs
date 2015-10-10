@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Model {
 
@@ -8,7 +9,7 @@ namespace Model {
         Element
     }
 
-    public abstract class Card {
+    public abstract class Card : IRequirement{
 
         public int Id {
             get { return id; }
@@ -45,12 +46,12 @@ namespace Model {
         /// 卡片类型
         /// </summary>
         /// <returns></returns>
-        public abstract CardType GetType();
+        public abstract CardType GetCardType();
     }
 
     public abstract class WeaponCard : Card {
 
-        public override CardType GetType() {
+        public override CardType GetCardType() {
             return CardType.Weapon;
         }
 
@@ -58,18 +59,18 @@ namespace Model {
         /// 武器牌所能造成的伤害
         /// </summary>
         /// <returns></returns>
-        public abstract int Damage(Character character);
+        public abstract float Damage(Character character);
 
     }
 
     public abstract class ArmorCard : Card {
-        public override CardType GetType() {
+        public override CardType GetCardType() {
             return CardType.Armor;
         }
     }
 
     public abstract class ElementCard : Card {
-        public override CardType GetType() {
+        public override CardType GetCardType() {
             return CardType.Element;
         }
     }
@@ -89,8 +90,8 @@ namespace Model {
             
         }
 
-        public override int Damage(Character character) {
-            
+        public override float Damage(Character character) {
+            return character.Strength * 1.1f;
         }
     }
 

@@ -60,6 +60,16 @@ namespace Model {
             return null;
         }
 
+
+        /// <summary>
+        /// 由id得到卡片类型
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public CardType GetCardTypeById(int id) {
+            return GetCardById(id).GetCardType();
+        }
+
         /// <summary>
         /// 加载所有卡片
         /// </summary>

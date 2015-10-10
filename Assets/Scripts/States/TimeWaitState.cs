@@ -11,12 +11,12 @@ namespace TurnBase {
             this.waitTime = waitTime;
         }
 
-        public virtual void Enter() {
+        public override void Enter() {
             base.Enter();
             waited = 0f;
         }
 
-        public virtual void Update() {
+        public override void Update() {
             if (waited > waitTime) {
                 this.Exit();
             } else {

@@ -53,16 +53,16 @@ namespace Model {
         /// <summary>
         /// 卡组
         /// </summary>
-        public List<int> Deck {
-            get { return deck; }
+        public int[] Deck {
+            get { return deck.ToArray(); }
         }
         private List<int> deck = new List<int>();
 
         /// <summary>
         /// 技能
         /// </summary>
-        public List<Skill> Skills {
-            get { return skills; }
+        public Skill[] Skills {
+            get { return skills.ToArray(); }
         } 
         private List<Skill> skills = new List<Skill>();
 
@@ -141,18 +141,18 @@ namespace Model {
         /// <summary>
         /// 手牌
         /// </summary>
-        public List<int> Hands {
-            get { return hands; }
+        public int[] Hands {
+            get { return hands.ToArray(); }
         }
         private List<int> hands;
 
         /// <summary>
         /// 人物身上的buff
         /// </summary>
-        public List<Buff> Buffs {
-            get { return buffs; }
-        } 
-        private List<Buff> buffs = new List<Buff>();
+//        public Buff[] Buffs {
+//            get { return buffs.ToArray(); }
+//        } 
+//        private List<Buff> buffs = new List<Buff>();
 
         /// <summary>
         /// 构造函数，初始化参数
