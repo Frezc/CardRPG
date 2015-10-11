@@ -38,9 +38,9 @@ public class TurnBaseManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	    //初始化流程
-        states.Add(new TimeWaitState("TurnStart", .5f));
-        states.Add(new DrawState("Draw"));
-        states.Add(new PrepareState("Prepare"));
+        states.Add(new TimeWaitState(this, "TurnStart", .5f));
+        states.Add(new DrawState(this, "Draw"));
+        states.Add(new PrepareState(this, "Prepare"));
         
 	}
 	

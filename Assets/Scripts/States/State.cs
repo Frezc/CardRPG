@@ -12,8 +12,17 @@ namespace TurnBase {
             get { return isOver; }
         }
 
+        public TurnBaseManager TBManager {
+            get { return tbManager; }
+        }
+
         private string name;
         private bool isOver;
+        private TurnBaseManager tbManager;
+
+        public State(TurnBaseManager tbManager) {
+            this.tbManager = tbManager;
+        }
 
         /// <summary>
         /// 进入该阶段时调用的函数

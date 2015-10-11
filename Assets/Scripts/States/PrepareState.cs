@@ -6,7 +6,7 @@ namespace TurnBase {
         private float leftTime;
         private bool[] playerCheck;
 
-        public PrepareState(string name, float maxWaitTime = 30f) {
+        public PrepareState(TurnBaseManager manager, string name, float maxWaitTime = 30f) : base(manager) {
             this.Name = name;
             this.maxWaitTime = maxWaitTime;
         }

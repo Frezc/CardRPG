@@ -6,7 +6,7 @@ namespace TurnBase {
         private float waitTime = 0.3f;
         private float waited = 0f;
 
-        public TimeWaitState(string name, float waitTime = .3f) {
+        public TimeWaitState(TurnBaseManager manager, string name, float waitTime = .3f) : base(manager) {
             this.Name = name;
             this.waitTime = waitTime;
         }

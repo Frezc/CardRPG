@@ -123,7 +123,7 @@ namespace Model {
         /// 技能类型
         /// </summary>
         /// <returns></returns>
-        public abstract SkillType GetType();
+        public abstract SkillType GetSkillType();
 
         /// <summary>
         /// 技能装备的要求
@@ -160,14 +160,11 @@ namespace Model {
         }
         protected int cooldown = 0;
 
-        public override SkillType GetType() {
+        public override SkillType GetSkillType() {
             return SkillType.Positive;
         }
 
         public PositiveSkill(Character character) : base(character) {
-        }
-
-        public PositiveSkill() {
         }
     }
 
@@ -176,7 +173,7 @@ namespace Model {
     /// </summary>
     public abstract class PassiveSkill : Skill {
 
-        public override SkillType GetType() {
+        public override SkillType GetSkillType() {
             return SkillType.Passive;
         }
 
