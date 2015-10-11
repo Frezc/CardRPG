@@ -64,7 +64,15 @@ namespace Model {
         }
     }
 
-    public abstract class Skill : IRequirement{
+    public abstract class Skill : IRequirement {
+
+        /// <summary>
+        /// 技能的所属者
+        /// </summary>
+        public Character Owner {
+            get { return owner; }
+        }
+        protected Character owner;
 
         /// <summary>
         /// 技能的最大等级
@@ -83,6 +91,14 @@ namespace Model {
         protected int curLevel = 0;
 
         /// <summary>
+        /// 技能的唯一id
+        /// </summary>
+        public int Id {
+            get { return id; }
+        }
+        protected int id = -1;
+
+        /// <summary>
         /// 技能名字
         /// </summary>
         public string Name {
@@ -97,6 +113,11 @@ namespace Model {
             get { return description; }
         }
         protected string description = "undefined";
+
+
+        public Skill(Character character) {
+            this.owner = character;
+        }
 
         /// <summary>
         /// 技能类型
@@ -120,6 +141,10 @@ namespace Model {
         }
     }
 
+
+    /// <summary>
+    /// 主动技能是在战斗中能直接使用的技能
+    /// </summary>
     public abstract class PositiveSkill : Skill {
         /// <summary>
         /// 讲技能效果保存到manager里，在结算阶段一起调用
@@ -138,34 +163,30 @@ namespace Model {
         public override SkillType GetType() {
             return SkillType.Positive;
         }
+
+        public PositiveSkill(Character character) : base(character) {
+        }
+
+        public PositiveSkill() {
+        }
     }
 
     /// <summary>
-    /// 被动技能主要是在战斗开始时给玩家附加buff
+    /// 被动技能主要是在战斗开始时给玩家或对方附加buff或一次性状态
     /// </summary>
-    public class PassiveSkill : Skill {
-
-
+    public abstract class PassiveSkill : Skill {
 
         public override SkillType GetType() {
             return SkillType.Passive;
         }
-    }
 
-    public class Attack : PositiveSkill {
+        /// <summary>
+        /// 战斗开始时发动的附加状态
+        /// </summary>
+        /// <param name="turnBaseManager"></param>
+        public abstract void Addon(TurnBaseManager turnBaseManager);
 
-        public Attack() {
-            name = "Attack";
-            maxLevel = 30;
-            curLevel = 1;
-        }
-
-        public override void UpdateDescription() {
-            description = "消耗一直武器卡进行攻击，伤害修正为 " + (1 + curLevel * .02f);
-        }
-
-        public override void Effect(TurnBaseManager turnBaseManager) {
-            
+        public PassiveSkill(Character character) : base(character) {
         }
     }
 
@@ -174,7 +195,7 @@ namespace Model {
     /// </summary>
     public class SkillBattleState {
 
-        private Skill skill;
+        private PositiveSkill skill;
 
         /// <summary>
         /// 冷却时间
@@ -187,7 +208,7 @@ namespace Model {
         /// </summary>
         public bool IsActive { get; set; }
 
-        public SkillBattleState(Skill skill) {
+        public SkillBattleState(PositiveSkill skill) {
             this.skill = skill;
             IsActive = true;
         }
@@ -208,7 +229,16 @@ namespace Model {
         /// 施放技能
         /// </summary>
         public void Spell(TurnBaseManager turnBaseManager) {
-            
+            if (!IsActive)
+                return;
+
+            skill.Effect(turnBaseManager);
+
+            this.cooldown += skill.Cooldown;
+            if (this.cooldown > 0) {
+                IsActive = false;
+            }
         }
     }
+
 }

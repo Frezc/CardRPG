@@ -3,6 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TurnBase;
 
+/// <summary>
+/// 回合中各个阶段调用的接口
+/// </summary>
+public abstract class ITurnBaseEvents {
+    public virtual void OnTurnStartEnter(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnDrawEnter(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnPrepareEnter(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnExecutiveEnter(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnAttack(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnAttacked(TurnBaseManager turnBaseManager) { }
+
+    public virtual void OnTurnEndEnter(TurnBaseManager turnBaseManager) { }
+}
+
 public class TurnBaseManager : MonoBehaviour {
 
     public UIController uiController;
