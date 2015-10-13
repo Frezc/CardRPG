@@ -14,6 +14,11 @@ namespace Model {
         private CardType[] cardTypes;
         private int[] ids;
 
+        /// <summary>
+        /// 技能需求的卡片类型和具体卡片
+        /// </summary>
+        /// <param name="cardTypes"></param>
+        /// <param name="ids"></param>
         public CostCards(CardType[] cardTypes = null, int[] ids = null) {
             this.cardTypes = cardTypes;
             this.ids = ids;
@@ -23,8 +28,10 @@ namespace Model {
         /// 传入的卡片是否符合卡片要求
         /// </summary>
         /// <param name="cards"></param>
+        /// <param name="canCost">是否可以被消耗</param>
         /// <returns></returns>
-        public bool MeetCost(int[] cards) {
+        public bool MeetCost(int[] cards, out bool canCost) {
+            canCost = false;
             if (cards.Length <= 0) {
                 return false;
             }
@@ -60,8 +67,12 @@ namespace Model {
                 }
             }
 
+            if (array.Count == 0) {
+                canCost = true;
+            }
             return true;
         }
+        
     }
 
     public abstract class Skill : IRequirement {
@@ -147,7 +158,10 @@ namespace Model {
         }
         protected int cooldown = 0;
 
-        //todo: 添加CostCards
+        /// <summary>
+        /// 卡片的消耗
+        /// </summary>
+        protected CostCards cost;
 
         public override SkillType GetSkillType() {
             return SkillType.Positive;
