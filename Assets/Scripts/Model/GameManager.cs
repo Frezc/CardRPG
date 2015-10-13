@@ -38,7 +38,36 @@ namespace Model {
 
         //Method
 
+        /// <summary>
+        /// 保存当前的玩家对象
+        /// </summary>
+        public void SavePlayer() {
+            if (player == null) {
+                return;
+            }
+            PlayerPrefs.SetString("Player", player.GetPlayerDataJson());
+        }
 
+        /// <summary>
+        /// 加载保存的玩家对象
+        /// </summary>
+        /// <returns>加载成功的对象，null为失败了</returns>
+        public Player LoadPlayer() {
+            if (PlayerPrefs.HasKey("Player")) {
+                var json = PlayerPrefs.GetString("Player");
+                player = Player.LoadFromJson(json);
+                return player;
+            } else {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 删除玩家数据
+        /// </summary>
+        public void DeletePlayer() {
+            PlayerPrefs.DeleteKey("Player");
+        }
 
     }
 }

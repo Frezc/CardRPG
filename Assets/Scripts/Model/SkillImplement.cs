@@ -10,7 +10,7 @@ namespace Model {
         /// <summary>
         /// 以后会使用xml来保存技能的属性
         /// </summary>
-        public SAttack(Character character) : base(character) {
+        public SAttack() {
             id = 0;
             name = "Attack";
             maxLevel = 5;
@@ -32,7 +32,7 @@ namespace Model {
 
         private Buff buff;
 
-        public SReload(Character character) : base(character) {
+        public SReload() {
             id = 2;
             name = "Reload";
             maxLevel = 5;

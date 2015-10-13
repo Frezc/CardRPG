@@ -21,7 +21,7 @@ namespace Model {
                 return instance;
             }
         }
-        private static CardManager instance = new CardManager();
+        private static CardManager instance = null;
         private static readonly object SynObject = new Object();
 
         private CardManager() {

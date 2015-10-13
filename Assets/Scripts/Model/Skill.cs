@@ -67,14 +67,6 @@ namespace Model {
     public abstract class Skill : IRequirement {
 
         /// <summary>
-        /// 技能的所属者
-        /// </summary>
-        public Character Owner {
-            get { return owner; }
-        }
-        protected Character owner;
-
-        /// <summary>
         /// 技能的最大等级
         /// </summary>
         public int MaxLevel {
@@ -114,17 +106,12 @@ namespace Model {
         }
         protected string description = "undefined";
 
-
-        public Skill(Character character) {
-            this.owner = character;
-        }
-
         /// <summary>
         /// 技能类型
         /// </summary>
         /// <returns></returns>
         public abstract SkillType GetSkillType();
-
+        
         /// <summary>
         /// 技能装备的要求
         /// </summary>
@@ -160,12 +147,12 @@ namespace Model {
         }
         protected int cooldown = 0;
 
+        //todo: 添加CostCards
+
         public override SkillType GetSkillType() {
             return SkillType.Positive;
         }
-
-        public PositiveSkill(Character character) : base(character) {
-        }
+        
     }
 
     /// <summary>
@@ -182,9 +169,7 @@ namespace Model {
         /// </summary>
         /// <param name="turnBaseManager"></param>
         public abstract void Addon(TurnBaseManager turnBaseManager);
-
-        public PassiveSkill(Character character) : base(character) {
-        }
+        
     }
 
     /// <summary>
@@ -202,6 +187,14 @@ namespace Model {
 
         private PositiveSkill skill;
 
+        /// <summary>
+        /// 技能所属
+        /// </summary>
+        public Character Owner {
+            get { return owner; }
+        }
+        private Character owner;
+        
         /// <summary>
         /// 冷却时间
         /// </summary>

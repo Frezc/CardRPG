@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LitJson;
 
 namespace Model {
     /// <summary>
@@ -61,10 +62,10 @@ namespace Model {
         /// <summary>
         /// 技能
         /// </summary>
-        public Skill[] Skills {
+        public SkillData[] Skills {
             get { return skills.ToArray(); }
         }
-        protected List<Skill> skills = new List<Skill>();
+        protected List<SkillData> skills = new List<SkillData>();
         
         /// <summary>
         /// 手牌上限
@@ -145,7 +146,50 @@ namespace Model {
                 Skills = skills
             };
 
+            return playerData;
         }
+
+
+        /// <summary>
+        /// 得到当前玩家数据的json字符串格式
+        /// </summary>
+        /// <returns></returns>
+        public string GetPlayerDataJson() {
+            return JsonMapper.ToJson(GetPlayerData());
+        }
+
+        /// <summary>
+        /// 从数据生成玩家对象
+        /// </summary>
+        /// <param name="data">数据类</param>
+        /// <returns></returns>
+        public static Player LoadFromData(PlayerData data) {
+            var player = new Player();
+            player.name = data.Name;
+            player.growth = data.Growth;
+            player.experience = data.Experience;
+            player.Level = data.Level;
+            player.Strength = data.Strength;
+            player.Agility = data.Agility;
+            player.Intelligence = data.Intelligence;
+            player.currentHP = data.CurrentHP;
+            player.deck = data.Deck;
+            player.skills = data.Skills;
+
+            return player;
+        }
+
+        /// <summary>
+        /// 从json数据生成玩家对象
+        /// </summary>
+        /// <param name="json">Json格式数据</param>
+        /// <returns></returns>
+        public static Player LoadFromJson(string json) {
+            PlayerData data = JsonMapper.ToObject<PlayerData>(json);
+
+            return LoadFromData(data);
+        }
+
 
         //todo: 升级时算出属性的随机提升，并通知ui，让玩家进行确认，如果玩家不升级则将经验退回0
     }
@@ -164,7 +208,7 @@ namespace Model {
         public int Intelligence { get; set; }
         public int CurrentHP { get; set; }
         public List<int> Deck { get; set; }
-        public List<int> Skills { get; set; }
+        public List<SkillData> Skills { get; set; }
     }
 
     /// <summary>
