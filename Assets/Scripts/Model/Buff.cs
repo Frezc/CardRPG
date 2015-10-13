@@ -94,11 +94,33 @@
         /// </summary>
         /// <param name="duration">新加buff的持续时间</param>
         public virtual void RefreshDuration(int duration) {
-            if (this.duration < duration) {
+            if (this.duration == -1) {
+                return;
+            }
+
+            if (this.duration < duration || duration == -1) {
                 this.duration = duration;
             }
         }
 
+        /// <summary>
+        /// 改变buff的持续时间
+        /// </summary>
+        /// <param name="turns">增减的持续回合数</param>
+        public virtual void ChangeDuration(int turns) {
+            if (duration == -1) {
+                return;
+            }
+
+            duration += turns;
+            if (duration < 0) {
+                duration = 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新Buff描述
+        /// </summary>
         public virtual void UpdateDescription() { }
     }
 }

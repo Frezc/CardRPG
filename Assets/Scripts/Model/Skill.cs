@@ -188,6 +188,14 @@ namespace Model {
     }
 
     /// <summary>
+    /// 保存技能状态的数据
+    /// </summary>
+    public class SkillData {
+        public int Id { get; set; }
+        public int Level { get; set; }
+    }
+
+    /// <summary>
     /// 技能在战斗时所需的一些属性
     /// </summary>
     public class SkillBattleState {

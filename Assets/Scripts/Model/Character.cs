@@ -48,7 +48,7 @@ namespace Model {
                 }
             }
         }
-        private int currentHP;
+        protected int currentHP;
 
         /// <summary>
         /// 卡组
@@ -56,16 +56,16 @@ namespace Model {
         public int[] Deck {
             get { return deck.ToArray(); }
         }
-        private List<int> deck = new List<int>();
+        protected List<int> deck = new List<int>();
 
         /// <summary>
         /// 技能
         /// </summary>
         public Skill[] Skills {
             get { return skills.ToArray(); }
-        } 
-        private List<Skill> skills = new List<Skill>();
-
+        }
+        protected List<Skill> skills = new List<Skill>();
+        
         /// <summary>
         /// 手牌上限
         /// </summary>
@@ -87,12 +87,21 @@ namespace Model {
         public BattleState GetBattleState() {
             return new BattleState(this);
         }
+        
     }
 
     /// <summary>
     /// 保存玩家的状态，主要是加了成长等属性
     /// </summary>
     public class Player : Character {
+
+        /// <summary>
+        /// 玩家的姓名
+        /// </summary>
+        public string Name {
+            get { return name; }
+        }
+        private string name;
 
         /// <summary>
         /// 玩家的成长率
@@ -117,7 +126,45 @@ namespace Model {
             get { return Level * 10; }
         }
 
+        /// <summary>
+        /// 得到当前玩家的数据包
+        /// </summary>
+        /// <returns></returns>
+        public PlayerData GetPlayerData() {
+            
+            var playerData = new PlayerData {
+                Name = name,
+                Growth = growth,
+                Experience = experience,
+                Level = Level,
+                Strength = Strength,
+                Agility = Agility,
+                Intelligence = Intelligence,
+                CurrentHP = currentHP,
+                Deck = deck,
+                Skills = skills
+            };
+
+        }
+
         //todo: 升级时算出属性的随机提升，并通知ui，让玩家进行确认，如果玩家不升级则将经验退回0
+    }
+
+
+    /// <summary>
+    /// 保存玩家数据的类
+    /// </summary>
+    public class PlayerData {
+        public string Name { get; set; }
+        public Growth Growth { get; set; }
+        public int Experience { get; set; }
+        public int Level { get; set; }
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Intelligence { get; set; }
+        public int CurrentHP { get; set; }
+        public List<int> Deck { get; set; }
+        public List<int> Skills { get; set; }
     }
 
     /// <summary>
@@ -149,10 +196,10 @@ namespace Model {
         /// <summary>
         /// 人物身上的buff
         /// </summary>
-//        public Buff[] Buffs {
-//            get { return buffs.ToArray(); }
-//        } 
-//        private List<Buff> buffs = new List<Buff>();
+        public Buff[] Buffs {
+            get { return buffs.ToArray(); }
+        } 
+        private List<Buff> buffs = new List<Buff>();
 
         /// <summary>
         /// 构造函数，初始化参数

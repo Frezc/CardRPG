@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using UnityEngine;
+using Object = System.Object;
 
 namespace Model {
     /// <summary>
@@ -27,6 +27,16 @@ namespace Model {
         private static readonly object SynObject = new Object();
 
         private GameManager() {}
+
+        //Field
+
+        public Player Player {
+            get { return player; }
+        }
+        private Player player;
+
+
+        //Method
 
 
 
