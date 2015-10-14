@@ -41,8 +41,8 @@ namespace Model {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Card GetCardById(int id) {
-            return cards[id];
+        public static Card GetCardById(int id) {
+            return Instance.cards[id];
         }
 
         /// <summary>
@@ -50,7 +50,8 @@ namespace Model {
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Card GetCardByName(string name) {
+        public static Card GetCardByName(string name) {
+            var cards = Instance.cards;
             foreach (var card in cards) {
                 if (card.Name == name) {
                     return card;
@@ -66,7 +67,7 @@ namespace Model {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public CardType GetCardTypeById(int id) {
+        public static CardType GetCardTypeById(int id) {
             return GetCardById(id).GetCardType();
         }
 

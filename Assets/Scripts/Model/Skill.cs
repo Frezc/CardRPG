@@ -54,7 +54,7 @@ namespace Model {
                 foreach (var cardType in cardTypes) {
                     var i = 0;
                     for (; i < array.Count; i++) {
-                        if (CardManager.Instance.GetCardTypeById(array[i]) == cardType) {
+                        if (CardManager.GetCardTypeById(array[i]) == cardType) {
                             array.RemoveAt(i);
                             i = -1; // mark as type getting flag
                             break;
@@ -137,6 +137,14 @@ namespace Model {
         /// </summary>
         public virtual void UpdateDescription() {
         }
+
+        /// <summary>
+        /// 创建该技能的战斗状态，如果是被动技能则返回null
+        /// </summary>
+        /// <returns></returns>
+        public virtual SkillBattleState CreateBattleState(Character owner, SkillData data) {
+            return null;
+        }
     }
 
 
@@ -166,7 +174,11 @@ namespace Model {
         public override SkillType GetSkillType() {
             return SkillType.Positive;
         }
-        
+
+        public override SkillBattleState CreateBattleState(Character owner, SkillData data) {
+            var state = new SkillBattleState(this, owner, data.Level);
+            return state;
+        }
     }
 
     /// <summary>
@@ -220,9 +232,18 @@ namespace Model {
         /// </summary>
         public bool IsActive { get; set; }
 
-        public SkillBattleState(PositiveSkill skill) {
+        /// <summary>
+        /// 技能当前的等级
+        /// </summary>
+        public int Level { get { return level; } }
+        private int level;
+
+        public SkillBattleState(PositiveSkill skill, Character owner, int level = 1) {
             this.skill = skill;
+            this.owner = owner;
             IsActive = true;
+            cooldown = skill.Cooldown;
+            this.level = level;
         }
 
         /// <summary>

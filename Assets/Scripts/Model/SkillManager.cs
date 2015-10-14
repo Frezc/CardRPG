@@ -42,8 +42,25 @@ namespace Model {
             skillList.Add(new SReload());
 
         }
+        
+        /// <summary>
+        /// 通过id获取技能对象
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Skill GetSkillById(int id) {
+            return Instance.skillList[id];
+        }
 
-        //todo: 通过id获取技能对象
-        //todo: 获得技能的战斗状态
+        /// <summary>
+        /// 获得技能的战斗状态
+        /// </summary>
+        /// <param name="character">技能所有者</param>
+        /// <param name="data">技能数据</param>
+        /// <returns></returns>
+        public static SkillBattleState CreateSkillBattleStateByData(Character character, SkillData data) {
+            var skill = GetSkillById(data.Id);
+            return skill.CreateBattleState(character, data);
+        }
     }
 }
