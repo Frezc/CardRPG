@@ -15,7 +15,7 @@ public class LinearExpandGroup : MonoBehaviour {
     public Alignment align = Alignment.Horizontal;
     public bool reverse = false;
     public RectTransform test;
-
+    public bool Center = true;
 
     float minLength = 0f;
 
@@ -25,6 +25,13 @@ public class LinearExpandGroup : MonoBehaviour {
 
         var childrenLength = 0f;
         var expectLen = 0f;
+
+        //设置居中或不居中时的锚点
+        var anchor = .5f;
+        if (!Center) {
+            anchor = 0f;
+        }
+
         if (align == Alignment.Horizontal) {
             // 第一项为Content本身 所以去除
             for (int i = 1; i < childrenTransforms.Length; i++) {
@@ -38,14 +45,14 @@ public class LinearExpandGroup : MonoBehaviour {
             resize(expectLen);
 
             if (reverse) {
-                child.anchorMin = new Vector2(1, 0.5f);
-                child.anchorMax = new Vector2(1,0.5f);
+                child.anchorMin = new Vector2(1, anchor);
+                child.anchorMax = new Vector2(1, anchor);
                 child.anchoredPosition = new Vector2(
                     - (expectLen - padding - child.sizeDelta.x / 2),
                     parentTransform.sizeDelta.y);
             } else {
-                child.anchorMin = new Vector2(0, 0.5f);
-                child.anchorMax = new Vector2(0, 0.5f);
+                child.anchorMin = new Vector2(0, anchor);
+                child.anchorMax = new Vector2(0, anchor);
                 child.anchoredPosition = new Vector2(
                     expectLen - padding - child.sizeDelta.x / 2,
                     parentTransform.sizeDelta.y);
@@ -61,16 +68,16 @@ public class LinearExpandGroup : MonoBehaviour {
                               + childrenLength + child.sizeDelta.y;
 
             resize(expectLen);
-
+            
             if (reverse) {
-                child.anchorMin = new Vector2(.5f, 1);
-                child.anchorMax = new Vector2(.5f, 1);
+                child.anchorMin = new Vector2(anchor, 1);
+                child.anchorMax = new Vector2(anchor, 1);
                 child.anchoredPosition = new Vector2(
                     parentTransform.sizeDelta.x,
                     - (expectLen - padding - child.sizeDelta.y / 2));
             } else {
-                child.anchorMin = new Vector2(.5f, 0);
-                child.anchorMax = new Vector2(.5f, 0);
+                child.anchorMin = new Vector2(anchor, 0);
+                child.anchorMax = new Vector2(anchor, 0);
                 child.anchoredPosition = new Vector2(
                     parentTransform.sizeDelta.x,
                     expectLen - padding - child.sizeDelta.y / 2);
@@ -80,6 +87,62 @@ public class LinearExpandGroup : MonoBehaviour {
 
         child.SetParent(GetComponent<Transform>(), false);
         
+    }
+
+    /// <summary>
+    /// 当删除子节点后调用，整理位置
+    /// </summary>
+    public void MoveToAlign() {
+        var parentTransform = GetComponent<RectTransform>();
+        var childrenTransforms = GetComponentsInChildren<RectTransform>();
+        var childrenLength = 0f;
+        var expectLen = 0f;
+
+        if (align == Alignment.Horizontal) {
+            // 第一项为Content本身 所以去除
+            for (int i = 1; i < childrenTransforms.Length; i++) {
+                childrenLength += childrenTransforms[i].sizeDelta.x;
+            }
+
+            //加入新子节点后的总宽度
+            expectLen = (childrenTransforms.Length + 1) * padding
+                              + childrenLength;
+
+            //将所有卡片移动到正确的位置
+            for (int i = 1; i < childrenTransforms.Length; i++) {
+                childrenTransforms[i].DOAnchorPos(new Vector2(
+                    reverse
+                        ? -(- childrenTransforms[i].sizeDelta.x / 2 +
+                            (padding + childrenTransforms[i].sizeDelta.x) * i)
+                        : - childrenTransforms[i].sizeDelta.x / 2 +
+                          (padding + childrenTransforms[i].sizeDelta.x) * i,
+                    childrenTransforms[i].anchoredPosition.y),
+                    .8f);
+            }
+        } else {
+            // 第一项为Content本身 所以去除
+            for (int i = 1; i < childrenTransforms.Length; i++) {
+                childrenLength += childrenTransforms[i].sizeDelta.y;
+            }
+
+            //加入新子节点后的总gao度
+            expectLen = (childrenTransforms.Length + 1) * padding
+                              + childrenLength;
+
+            //将所有卡片移动到正确的位置
+            for (int i = 1; i < childrenTransforms.Length; i++) {
+                childrenTransforms[i].DOAnchorPos(new Vector2(
+                    childrenTransforms[i].anchoredPosition.x,
+                    reverse
+                        ? -(- childrenTransforms[i].sizeDelta.y / 2 +
+                            (padding + childrenTransforms[i].sizeDelta.y) * i)
+                        : - childrenTransforms[i].sizeDelta.y / 2 +
+                          (padding + childrenTransforms[i].sizeDelta.y) * i),
+                    .8f);
+            }
+        }
+
+        resize(expectLen);
     }
 
     public void FadeInAddChild(RectTransform child) {
@@ -119,10 +182,10 @@ public class LinearExpandGroup : MonoBehaviour {
         FadeInAddChild(nObj1);
         var nObj2 = Instantiate(test).GetComponent<RectTransform>();
         FadeInAddChild(nObj2);
-//        var nObj3 = Instantiate(test).GetComponent<RectTransform>();
-//        AddChild(nObj3);
-//        var nObj4 = Instantiate(test).GetComponent<RectTransform>();
-//        AddChild(nObj4);
+        var nObj3 = Instantiate(test).GetComponent<RectTransform>();
+        AddChild(nObj3);
+        var nObj4 = Instantiate(test).GetComponent<RectTransform>();
+        AddChild(nObj4);
     }
     
 }
