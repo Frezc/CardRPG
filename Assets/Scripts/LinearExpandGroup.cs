@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.UI;
 
@@ -21,7 +22,16 @@ public class LinearExpandGroup : MonoBehaviour {
 
     public void AddChild(RectTransform child) {
         var parentTransform = GetComponent<RectTransform>();
-        var childrenTransforms = GetComponentsInChildren<RectTransform>();
+        //这样会把孙结点也包含进来
+//        var childrenTransforms = GetComponentsInChildren<RectTransform>();
+        var childrenTransforms = new List<RectTransform>();
+        var transform = this.transform;
+        for (int i = 0; i < transform.childCount; i++) {
+            var achild = transform.GetChild(i);
+            if (achild.gameObject.activeSelf) {
+                childrenTransforms.Add(achild.GetComponent<RectTransform>());
+            }
+        }
 
         var childrenLength = 0f;
         var expectLen = 0f;
@@ -33,13 +43,12 @@ public class LinearExpandGroup : MonoBehaviour {
         }
 
         if (align == Alignment.Horizontal) {
-            // 第一项为Content本身 所以去除
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenLength += childrenTransforms[i].sizeDelta.x;
             }
 
             //加入新子节点后的总宽度
-            expectLen = (childrenTransforms.Length + 1) * padding
+            expectLen = (childrenTransforms.Count + 2) * padding
                               + childrenLength + child.sizeDelta.x;
 
             resize(expectLen);
@@ -59,12 +68,12 @@ public class LinearExpandGroup : MonoBehaviour {
             }
         } else {
             // 第一项为Content本身 所以去除
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenLength += childrenTransforms[i].sizeDelta.y;
             }
 
             //加入新子节点后的总宽度
-            expectLen = (childrenTransforms.Length + 1) * padding
+            expectLen = (childrenTransforms.Count + 2) * padding
                               + childrenLength + child.sizeDelta.y;
 
             resize(expectLen);
@@ -94,49 +103,59 @@ public class LinearExpandGroup : MonoBehaviour {
     /// </summary>
     public void MoveToAlign() {
         var parentTransform = GetComponent<RectTransform>();
-        var childrenTransforms = GetComponentsInChildren<RectTransform>();
+        //        var childrenTransforms = GetComponentsInChildren<RectTransform>();
+
+        var childrenTransforms = new List<RectTransform>();
+        var transform = this.transform;
+        for (int i = 0; i < transform.childCount; i++) {
+            var achild = transform.GetChild(i);
+            if (achild.gameObject.activeSelf) {
+                childrenTransforms.Add(achild.GetComponent<RectTransform>());
+            }
+        }
+
         var childrenLength = 0f;
         var expectLen = 0f;
 
         if (align == Alignment.Horizontal) {
             // 第一项为Content本身 所以去除
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenLength += childrenTransforms[i].sizeDelta.x;
             }
 
             //加入新子节点后的总宽度
-            expectLen = (childrenTransforms.Length + 1) * padding
+            expectLen = (childrenTransforms.Count + 1) * padding
                               + childrenLength;
 
             //将所有卡片移动到正确的位置
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenTransforms[i].DOAnchorPos(new Vector2(
                     reverse
-                        ? -(- childrenTransforms[i].sizeDelta.x / 2 +
+                        ? -(padding + childrenTransforms[i].sizeDelta.x / 2 +
                             (padding + childrenTransforms[i].sizeDelta.x) * i)
-                        : - childrenTransforms[i].sizeDelta.x / 2 +
+                        : padding + childrenTransforms[i].sizeDelta.x / 2 +
                           (padding + childrenTransforms[i].sizeDelta.x) * i,
                     childrenTransforms[i].anchoredPosition.y),
                     .8f);
             }
         } else {
             // 第一项为Content本身 所以去除
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenLength += childrenTransforms[i].sizeDelta.y;
             }
 
             //加入新子节点后的总gao度
-            expectLen = (childrenTransforms.Length + 1) * padding
+            expectLen = (childrenTransforms.Count + 1) * padding
                               + childrenLength;
 
             //将所有卡片移动到正确的位置
-            for (int i = 1; i < childrenTransforms.Length; i++) {
+            for (int i = 0; i < childrenTransforms.Count; i++) {
                 childrenTransforms[i].DOAnchorPos(new Vector2(
                     childrenTransforms[i].anchoredPosition.x,
                     reverse
-                        ? -(- childrenTransforms[i].sizeDelta.y / 2 +
+                        ? -(padding + childrenTransforms[i].sizeDelta.y / 2 +
                             (padding + childrenTransforms[i].sizeDelta.y) * i)
-                        : - childrenTransforms[i].sizeDelta.y / 2 +
+                        : padding + childrenTransforms[i].sizeDelta.y / 2 +
                           (padding + childrenTransforms[i].sizeDelta.y) * i),
                     .8f);
             }
